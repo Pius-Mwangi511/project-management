@@ -1,10 +1,12 @@
-import { Body, Controller, Get, Post, ValidationPipe,Param } from '@nestjs/common';
+import { Body, Controller, Get, Post, ValidationPipe,Param, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
 import { User } from 'generated/prisma';
 import { CreateUserDto } from './dto/createUserDto'; 
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
 
 @Controller('user')
+@UseGuards(JwtAuthGuard)
 export class UserController {
     constructor(private userService:UserService){ }
     @Post()
