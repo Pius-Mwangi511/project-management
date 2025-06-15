@@ -1,10 +1,14 @@
-import { Injectable, UnauthorizedException, ConflictException } from '@nestjs/common';
+import {
+  Injectable,
+  UnauthorizedException,
+  ConflictException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { UserService } from '../user/user.service'; // ✅
 import { PrismaService } from '../prisma/prisma.service'; // ✅
-import { RegisterDto } from './dtos/register.dto'; 
-import { LoginDto } from './dtos/login.dto'; 
+import { RegisterDto } from './dtos/register.dto';
+import { LoginDto } from './dtos/login.dto';
 
 @Injectable()
 export class AuthService {
@@ -37,7 +41,12 @@ export class AuthService {
 
     return {
       message: 'User registered successfully',
-      user: { id: user.id, name: user.name, email: user.email, role: user.role },
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      },
     };
   }
 
