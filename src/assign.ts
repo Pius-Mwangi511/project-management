@@ -1,60 +1,43 @@
-import { Assignment, getProjects, getUsers } from "./shared.js";
-
-function populateDropdowns() {
-    const users = getUsers();
-    const projects = getProjects();
-    const userSelect = document.getElementById('users') as HTMLSelectElement;
-    const projectSelect = document.getElementById('projects') as HTMLSelectElement;
+function loadDropdowns() {
+    const users: User[] = JSON.parse(localStorage.getItem("users") || "[]");
+    const projects: Project[] = JSON.parse(localStorage.getItem("projects") || "[]");
   
-    users.forEach(u => {
-      const opt = document.createElement('option');
-      opt.value = u.email;
-      opt.textContent = `${u.firstName} ${u.lastName}`;
-      userSelect.appendChild(opt);
+    const userSelect = document.getElementById("users") as HTMLSelectElement;
+    const projectSelect = document.getElementById("projects") as HTMLSelectElement;
+  
+    userSelect.innerHTML = '<option value="">Users</option>';
+    projectSelect.innerHTML = '<option value="">Projects</option>';
+  
+    users.forEach(user => {
+      if (!user.assignedProject) {
+        userSelect.innerHTML += `<option value="${user.email}">${user.firstname} ${user.lastname}</option>`;
+      }
     });
   
-    projects.forEach(p => {
-      const opt = document.createElement('option');
-      opt.value = p.id;
-      opt.textContent = p.name;
-      projectSelect.appendChild(opt);
-    });
-  }
-  
-  function assignProject() {
-    const user = (document.getElementById('users') as HTMLSelectElement).value;
-    const project = (document.getElementById('projects') as HTMLSelectElement).value;
-  
-    if (!user || !project) return alert('Please select both user and project.');
-  
-    let assignments: Assignment[] = JSON.parse(localStorage.getItem('assignments') || '[]');
-  
-    const alreadyAssigned = assignments.some(a => a.userEmail === user);
-    if (alreadyAssigned) return alert('User already has a project.');
-  
-    assignments.push({ userEmail: user, projectId: project, status: 'assigned' });
-    localStorage.setItem('assignments', JSON.stringify(assignments));
-  
-    alert('Project assigned successfully.');
-    renderAssignments();
-  }
-  
-  function renderAssignments() {
-    const assignments: Assignment[] = JSON.parse(localStorage.getItem('assignments') || '[]');
-    const div = document.querySelector('.assigned-projects');
-    const projects = getProjects();
-    if (!div) return;
-  
-    div.innerHTML = '';
-    assignments.forEach(a => {
-      const project = projects.find(p => p.id === a.projectId);
-      if (!project) return;
-  
-      const el = document.createElement('div');
-      el.textContent = `User: ${a.userEmail} → Project: ${project.name}`;
-      div.appendChild(el);
+    projects.forEach(project => {
+      if (!projectAssigned(project.id)) {
+        projectSelect.innerHTML += `<option value="${project.id}">${project.name}</option>`;
+      }
     });
   }
   
-  document.getElementById('assignBtn')?.addEventListener('click', assignProject);
-  window.onload = populateDropdowns;
+  function projectAssigned(projectId: string): boolean {
+    const users: User[] = JSON.parse(localStorage.getItem("users") || "[]");
+    return users.some(user => user.assignedProject === projectId);
+  }
+  
+  document.getElementById("assignBtn")?.addEventListener("click", () => {
+    const userEmail = (document.getElementById("users") as HTMLSelectElement).value;
+    const projectId = (document.getElementById("projects") as HTMLSelectElement).value;
+  
+    if (!userEmail || !projectId) return alert("Please select both user and project");
+  
+    const users: User[] = JSON.parse(localStorage.getItem("users") || "[]");
+    const index = users.findIndex(u => u.email === userEmail);
+    if (index !== -1) {
+      users[index].assignedProject = projectId;
+      localStorage.setItem("users", JSON.stringify(users));
+      alert("Project assigned successfully.");
+      loadDropdowns();
+    }
+  });

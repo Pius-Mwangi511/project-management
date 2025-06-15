@@ -1,53 +1,51 @@
 "use strict";
-var _a, _b;
-const ADMIN = {
-    email: 'admin@admin.com',
-    password: 'admin123',
-};
-function getUsers() {
-    return JSON.parse(localStorage.getItem('users') || '[]');
-}
-function saveUser(user) {
-    const users = getUsers();
-    const exists = users.some(u => u.email === user.email);
-    if (!exists) {
-        users.push(user);
-        localStorage.setItem('users', JSON.stringify(users));
-        return true;
+const adminEmail = "admin@pm.com";
+const adminPassword = "admin123";
+// Registration
+const registerBtn = document.getElementById("register");
+registerBtn === null || registerBtn === void 0 ? void 0 : registerBtn.addEventListener("click", () => {
+    var _a, _b;
+    const firstname = document.getElementById("firstname").value.trim();
+    const lastname = document.getElementById("lastname").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value.trim();
+    if (!firstname || !lastname || !email || !password)
+        return alert("All fields required");
+    const users = JSON.parse(localStorage.getItem("users") || "[]");
+    const newUser = {
+        id: Date.now().toString(),
+        firstname,
+        lastname,
+        email,
+        password
+    };
+    if (users.find(user => user.email === email)) {
+        return alert("User already exists");
     }
-    return false;
-}
-console.log('auth.js loaded');
-// Handle Register
-(_a = document.querySelector('button#register')) === null || _a === void 0 ? void 0 : _a.addEventListener('click', () => {
-    const firstName = document.getElementById('firstname').value.trim();
-    const lastName = document.getElementById('lastname').value.trim();
-    const email = document.getElementById('email').value.trim();
-    const password = document.getElementById('password').value.trim();
-    if (!firstName || !lastName || !email || !password)
-        return alert('All fields required.');
-    const success = saveUser({ firstName, lastName, email, password, role: 'user' });
-    if (success) {
-        alert('Registration successful.');
-        window.location.href = 'login.html';
+    users.push(newUser);
+    localStorage.setItem("users", JSON.stringify(users)); //save to localstorage
+    if (window.location.pathname.includes("Admin.html")) {
+        (_b = (_a = window).populateUserDropdown) === null || _b === void 0 ? void 0 : _b.call(_a); //refreshes dropdn if on adminpage
     }
-    else {
-        alert('User already registered.');
-    }
+    alert("Registration successful!");
+    window.location.href = "user.html"; //redirection after registration
 });
-// Handle Login
-(_b = document.querySelector('button#login')) === null || _b === void 0 ? void 0 : _b.addEventListener('click', () => {
-    const email = document.getElementById('email').value.trim();
-    const password = document.getElementById('password').value.trim();
-    if (email === ADMIN.email && password === ADMIN.password) {
-        localStorage.setItem('activeUser', JSON.stringify({ email, role: 'admin' }));
-        window.location.href = 'Admin.html';
+// Login
+const loginBtn = document.getElementById("login");
+loginBtn === null || loginBtn === void 0 ? void 0 : loginBtn.addEventListener("click", () => {
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value.trim();
+    if (email === adminEmail && password === adminPassword) {
+        localStorage.setItem("adminLoggedIn", "true");
+        window.location.href = "admin.html";
         return;
     }
-    const users = getUsers();
+    const users = JSON.parse(localStorage.getItem("users") || "[]");
     const user = users.find(u => u.email === email && u.password === password);
-    if (!user)
-        return alert('Invalid credentials or user not registered.');
-    localStorage.setItem('activeUser', JSON.stringify(user));
-    window.location.href = 'user.html';
+    if (!user) {
+        alert("Invalid credentials or user not registered.");
+        return;
+    }
+    localStorage.setItem("loggedInUser", JSON.stringify(user));
+    window.location.href = "user.html";
 });

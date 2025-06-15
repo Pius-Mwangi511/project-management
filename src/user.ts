@@ -1,79 +1,70 @@
-import { Assignment, getProjects, getUsers} from "./shared.js";
-
-function loadUserProjects() {
-    const currentUser = JSON.parse(localStorage.getItem('activeUser') || '{}');
-    const assignments: Assignment[] = JSON.parse(localStorage.getItem('assignments') || '[]');
-    const projects = getProjects();
-    const container = document.getElementById('project-list')!;
-    const msg = document.getElementById('message')!;
-  
-    const assigned = assignments.find(a => a.userEmail === currentUser.email && a.status === 'assigned');
-  
-    if (!assigned) {
-      msg.style.display = 'block';
-      container.innerHTML = '';
-      return;
-    }
-  
-    msg.style.display = 'none';
-  
-    const project = projects.find(p => p.id === assigned.projectId);
-    if (!project) return;
-  
-    container.innerHTML = `
-      <div>
-        <h3>${project.name}</h3>
-        <p>${project.description}</p>
-        <p>Due: ${project.endDate}</p>
-        <button onclick="completeProject('${assigned.projectId}')">Mark as Completed</button>
-      </div>
-    `;
+interface Project {
+    id: string;
+    name: string;
+    desc: string;
+    endDate: string;
+    status: "pending" | "completed";
   }
   
-  function completeProject(projectId: string) {
-    const assignments: Assignment[] = JSON.parse(localStorage.getItem('assignments') || '[]');
-    const currentUser = JSON.parse(localStorage.getItem('activeUser') || '{}');
-  
-    const index = assignments.findIndex(a => a.projectId === projectId && a.userEmail === currentUser.email);
-    if (index !== -1) {
-      assignments[index].status = 'completed';
-      localStorage.setItem('assignments', JSON.stringify(assignments));
-      alert('Project marked as completed.');
-      loadUserProjects();
-    }
+  interface User {
+    email: string;
+    assignedProject?: string;
   }
   
-  window.onload = loadUserProjects;
-
-  window.onload = () => {
-    loadUserProjects();
+  // Get logged-in user and user list
+  const user: User = JSON.parse(localStorage.getItem("loggedInUser") || "{}");
+  const users: User[] = JSON.parse(localStorage.getItem("users") || "[]");
+  const currentUser = users.find(u => u.email === user.email);
   
-    // Now add all the event listeners here
-    const dashboardBtn =  document.getElementById('btnDashboard');
-    const viewBtn = document.getElementById('btnViewProject');
-    // const accountSidebarBtn = document.getElementById('btnAccountSidebar');
-    // const accountCardBtn = document.getElementById('btnAccountCard');
-    const logoutBtn = document.getElementById('btnLogout');
-
-    dashboardBtn?.addEventListener('click',() => {
-      alert('Viewing dashboard...');
+  // Get DOM elements
+  const message = document.getElementById("message") as HTMLParagraphElement;
+  const list = document.getElementById("project-list") as HTMLDivElement;
+  const viewBtn = document.getElementById("btnViewProject") as HTMLButtonElement;
+  const dashboardBtn = document.getElementById("dashboard") as HTMLButtonElement;
+  const viewSectionBtn = document.getElementById("viewSection") as HTMLButtonElement;
+  const Dashboard =document.getElementById("btnDashboard") as HTMLButtonElement;
+  
+  
+  
+  if (viewBtn && list && message && viewSectionBtn && dashboardBtn) {
+    viewBtn.addEventListener("click", () => {
+        dashboardBtn.style.display = "none";
+        viewSectionBtn.style.display = "block";
+      // If user has no assigned project
+      if (!currentUser?.assignedProject) {
+        message.textContent = "No project assigned to you yet.";
+        message.style.display = "block";
+        list.innerHTML = "";
+        return;
+      }
+  
+      message.style.display = "none";
+  
+      const projects: Project[] = JSON.parse(localStorage.getItem("projects") || "[]");
+      const project = projects.find(p => p.id === currentUser.assignedProject);
+  
+      if (project) {
+        list.innerHTML = `
+          <div class="card">
+            <strong>${project.name}</strong><br/>
+            ${project.desc}<br/>
+            Due: ${project.endDate}<br/>
+            Status: ${project.status}<br/>
+            ${project.status === "pending" ? '<button id="completeBtn">Complete</button>' : ""}
+          </div>
+        `;
+  
+        const completeBtn = document.getElementById("completeBtn");
+        completeBtn?.addEventListener("click", () => {
+          project.status = "completed";
+          localStorage.setItem("projects", JSON.stringify(projects));
+          alert("Project marked as complete!");
+          viewBtn.click(); // Refresh view
+        });
+      } else {
+        message.textContent = "Assigned project not found.";
+        message.style.display = "block";
+        list.innerHTML = "";
+      }
     });
-  
-    viewBtn?.addEventListener('click', () => {
-      alert('Viewing project...');
-      // Example: document.getElementById('view-projects')!.style.display = 'block';
-    });
-  
-    // accountSidebarBtn?.addEventListener('click', () => {
-    //   alert('Sidebar Account clicked');
-    // });
-  
-    // accountCardBtn?.addEventListener('click', () => {
-    //   alert('Card Account clicked');
-    // });
-  
-    logoutBtn?.addEventListener('click', () => {
-      localStorage.removeItem('activeUser');
-      window.location.href = 'login.html';
-    });
-  };
+  }

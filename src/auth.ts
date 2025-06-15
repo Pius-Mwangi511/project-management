@@ -1,68 +1,72 @@
 interface User {
-    firstName: string;
-    lastName: string;
+    id: string
+    firstname: string;
+    lastname: string;
     email: string;
     password: string;
-    role: 'admin' | 'user';
+    assignedProject?: string;
   }
   
-  const ADMIN = {
-    email: 'admin@admin.com',
-    password: 'admin123',
-  };
+  const adminEmail = "admin@pm.com";
+  const adminPassword = "admin123";
   
-  function getUsers(): User[] {
-    return JSON.parse(localStorage.getItem('users') || '[]');
-  }
+  // Registration
+  const registerBtn = document.getElementById("register") as HTMLButtonElement;
+  registerBtn?.addEventListener("click", () => {
+    const firstname = (document.getElementById("firstname") as HTMLInputElement).value.trim();
+    const lastname = (document.getElementById("lastname") as HTMLInputElement).value.trim();
+    const email = (document.getElementById("email") as HTMLInputElement).value.trim();
+    const password = (document.getElementById("password") as HTMLInputElement).value.trim();
   
-  function saveUser(user: User) {
-    const users = getUsers();
-    const exists = users.some(u => u.email === user.email);
-    if (!exists) {
-      users.push(user);
-      localStorage.setItem('users', JSON.stringify(users));
-      return true;
+    if (!firstname || !lastname || !email || !password) return alert("All fields required");
+  
+    const users: User[] = JSON.parse(localStorage.getItem("users") || "[]");
+
+    const newUser: User = {
+     id: Date.now().toString(),
+     firstname,
+     lastname,
+     email,
+     password
+    };
+  
+    if (users.find(user => user.email === email)) {
+      return alert("User already exists");
     }
-    return false;
-  }
-
-
-  console.log('auth.js loaded');
-
-
-  // Handle Register
-  document.querySelector('button#register')?.addEventListener('click', () => {
-    const firstName = (document.getElementById('firstname') as HTMLInputElement).value.trim();
-    const lastName = (document.getElementById('lastname') as HTMLInputElement).value.trim();
-    const email = (document.getElementById('email') as HTMLInputElement).value.trim();
-    const password = (document.getElementById('password') as HTMLInputElement).value.trim();
   
-    if (!firstName || !lastName || !email || !password) return alert('All fields required.');
-  
-    const success = saveUser({ firstName, lastName, email, password, role: 'user' });
-    if (success) {
-      alert('Registration successful.');
-      window.location.href = 'login.html';
-    } else {
-      alert('User already registered.');
+    users.push(newUser);
+    localStorage.setItem("users", JSON.stringify(users));//save to localstorage
+
+    if
+    (window.location.pathname.includes("Admin.html"))
+    {
+        (window as any).populateUserDropdown?.();//refreshes dropdn if on adminpage
     }
+  
+    alert("Registration successful!");
+    window.location.href = "user.html";//redirection after registration
   });
   
-  // Handle Login
-  document.querySelector('button#login')?.addEventListener('click', () => {
-    const email = (document.getElementById('email') as HTMLInputElement).value.trim();
-    const password = (document.getElementById('password') as HTMLInputElement).value.trim();
+  // Login
+  const loginBtn = document.getElementById("login") as HTMLButtonElement;
+  loginBtn?.addEventListener("click", () => {
+    const email = (document.getElementById("email") as HTMLInputElement).value.trim();
+    const password = (document.getElementById("password") as HTMLInputElement).value.trim();
   
-    if (email === ADMIN.email && password === ADMIN.password) {
-      localStorage.setItem('activeUser', JSON.stringify({ email, role: 'admin' }));
-      window.location.href = 'Admin.html';
+    if (email === adminEmail && password === adminPassword) {
+      localStorage.setItem("adminLoggedIn", "true");
+      window.location.href = "admin.html";
       return;
     }
   
-    const users = getUsers();
+    const users: User[] = JSON.parse(localStorage.getItem("users") || "[]");
     const user = users.find(u => u.email === email && u.password === password);
-    if (!user) return alert('Invalid credentials or user not registered.');
   
-    localStorage.setItem('activeUser', JSON.stringify(user));
-    window.location.href = 'user.html';
+    if (!user) {
+      alert("Invalid credentials or user not registered.");
+      return;
+    }
+  
+    localStorage.setItem("loggedInUser", JSON.stringify(user));
+    window.location.href = "user.html";
   });
