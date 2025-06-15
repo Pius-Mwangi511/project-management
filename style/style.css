@@ -1,0 +1,312 @@
+body{
+    background-color: hsl(60, 26%, 93%);
+    padding: 0;
+    margin: 0;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+.registration{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.card1{
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 20px auto;
+    width: 20%;
+    height: 55vh;
+    box-shadow: 0 10px 20px hsl(0, 2%, 81%);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card1 h2, .login-card h2{
+    text-align: center;
+    color: hsl(0, 0%, 20%);
+}
+
+.card1 input, .login-card input{
+    width: 85%;
+    padding: 10px;
+    border: 1px solid hsl(0, 0%, 80%);
+    border-radius: 10px;
+    margin: 10px auto;
+}
+
+.card1 button, .login-card button{
+    width: 95%;
+    padding: 10px;
+    margin-top: 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: hsl(134, 61%, 41%);
+    color: white;
+    cursor: pointer;
+}
+
+.card1 button:active, .login-card button:active{
+    background-color: hsl(134, 66%, 30%);
+}
+
+.register{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.que, .register{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.que a, .register a{
+    color: blue;
+    cursor: pointer;
+    text-decoration: none;
+    font-weight: bold;
+   
+}
+
+.login{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.login-card{
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 20px auto;
+    width: 20%;
+    height: 40vh;
+    box-shadow: 0 10px 20px hsl(0, 2%, 81%);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+   
+}
+
+.container{
+    display: flex;
+    height: 100vh;
+
+}
+
+.sidebar{
+    background-color: white;
+    width: 10%;
+    padding: 20px;
+    height: 100vh;
+
+}
+
+.sidebar img{
+    width: 20px;
+    height: 20px;
+}
+
+.sidebar button{
+    width: 100%;
+    padding: 10px;
+    margin-top: 20px;
+    border: none;
+    border-radius: 5px;
+    background-color:transparent;
+    color: black;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.sidebar button:hover{
+    background-color: hsl(60, 26%, 93%);
+    color: blue;
+    border-radius: 10px;
+}
+
+.sidebar button:active{
+    background-color: hsl(60, 4%, 82%);
+    color: blue;
+    border-radius: 10px;
+}
+
+.main-cont{
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+#dashboard h1{
+    margin-left: 25px;
+}
+
+.cards{
+    display: flex;
+    flex-direction: row;
+}
+
+.card{
+    background-color: white;
+    border: none;
+    box-shadow: 0 4px 10px hsla(0, 0%, 0%, 0.1);
+    border-radius: 10px;
+    padding: 20px;
+    margin: 30px;
+    width: 25%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 10px 20px hsl(0, 2%, 81%);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card img{ 
+    width: 20%;
+    height: 20%;
+}
+
+.card button{
+    width: 80%;
+    padding: 10px;
+    margin-top: 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: hsla(150, 2%, 83%, 0.455);
+    color: blue;
+    cursor: pointer;
+}
+
+.card button:hover{
+    background-color: hsl(150, 2%, 83%);
+}
+
+.card button:active{
+    background-color: hsl(160, 2%, 71%);
+}
+
+.footer-cards{
+    display: flex;
+    flex-direction: row;
+    margin-top: 170px;
+}
+
+.footer-card{
+    background-color: white;
+    border: none;
+    box-shadow: 0 4px 10px hsla(0, 0%, 0%, 0.1);
+    border-radius: 10px;
+    padding: 20px;
+    margin: 30px;
+    width: 25%;
+    height: auto;
+    box-shadow: 0 10px 20px hsl(0, 2%, 81%);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.top{
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid grey;
+    margin-bottom: 10px;
+}
+
+.top span{
+    color: hsla(237, 87%, 47%, 0.681);
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bolder;
+}
+
+.top img{
+    width: 10%;
+    height: 10%;
+}
+
+#add-projects{
+    display: flex;
+    flex-direction: column;
+}
+
+.add-cont, .all-projects{
+    background-color: white;
+    width: 250%;
+    height: auto;
+    padding: 20px;
+    box-shadow: 0 10px 20px hsl(0, 2%, 81%);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.add-cont input{
+    margin: 10px auto;
+    width: 95%;
+    padding: 10px;
+    border-radius: 15px;
+    border: none;
+    background-color: hsla(180, 3%, 88%, 0.547);
+}
+
+.add-cont h2{
+    border-bottom: 1px solid rgb(199, 197, 197);
+}
+
+.add-cont button, .assign-cont button{
+    width: 12%;
+    padding: 10px;
+    border-radius: 20px;
+    border: none;
+    margin-left: 85%;
+    margin-top: 10px;
+    background-color: hsl(240, 91%, 56%);
+    color: white;
+}
+
+.add-cont button:hover, .assign-cont button:hover{
+    background-color: hsl(240, 72%, 48%);
+}
+
+.add-cont button:active, .assign-cont button:active{
+    background-color: hsl(240, 75%, 38%);
+}
+
+.assign-cont, .assigned-projects{
+    background-color: white;
+    width: 400%;
+    height: auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 10px 20px hsl(0, 2%, 81%);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+#users, #projects{
+    padding: 10px;
+    border-radius: 10px;
+    border: none;
+    background-color: hsla(180, 3%, 88%, 0.547);
+    margin-bottom: 15px;
+    
+}
+
+.btn{
+    margin-top: 320px;
+}
+
+.btn1{
+    margin-top: 390px;
+}
+
+
+   
+
+
+

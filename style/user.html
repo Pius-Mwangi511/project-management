@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="stylesheet" href="style.css">
+    <title>User Dashboard</title>
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+        <button id="btnDashboard">
+            <img src="images/apps-outline.svg" alt="">
+            Dashboard
+        </button>
+        <button id="btnViewProject">
+            <img src="images/folder-outline.svg" alt="">
+            View Project
+        </button>
+
+      <div class="btn1">
+        <button>
+            <img src="images/person-outline.svg" alt="">
+            Account
+        </button>
+        <button id="btnLogout">
+            <img src="images/arrow-back-outline.svg" alt="">
+            logout
+        </button>
+      </div>
+
+    </div>
+
+    <div class="main-cont">
+
+         <div id="dashboard">
+                <h1>Dashboard</h1>
+
+            <div class="cards">
+
+                 <div class="card">
+                        <img src="images/folder-outline.svg" alt="">
+                        <h4>View Projects</h4>
+                        <button id="btnViewProject">View Project</button>
+                 </div>
+
+                 <div class="card">
+                        <img src="images/person-outline.svg" alt="">
+                        <h4>Account Profile</h4>
+                        <button>Account</button>
+                </div>
+                   
+            </div>
+
+                <footer>
+                    <div class="footer-cards">
+
+                      <div class="footer-card">
+                        <div class="top">
+                            <span>500</span> 
+                            <img src="images/folder-outline.svg" alt="">
+                        </div>
+                        <div>completed projects</div>
+                      </div>
+                    </div>
+                </footer>
+
+        </div> 
+
+        <div id="view-projects"></div>
+        <h2>Projects</h2>
+
+        <!-- assigned project -->
+        <div id="project-list"></div>
+
+        <!-- message if no assigned project -->
+        <p id="message" style="display: none; color: grey;">
+            No pending projects
+        </p>
+
+    </div>
+    
+    <script type="=module" src="../dist/user.js"></script>
+</body>
+</html>

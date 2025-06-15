@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Admin Dashbord</title>
+</head>
+<body>
+    <div class="container">
+
+        <div class="sidebar">
+            <button id="btnDashboard">
+                <img src="images/apps-outline.svg" alt="">
+                Dashboard
+            </button>
+            <button id="btnAdd">
+                <img src="images/folder-outline.svg" alt="">
+                Add Project
+            </button>
+            <button id="btnAssign">
+                <img src="images/folder-outline.svg" alt="">
+                Assign Project
+            </button>
+
+          <div class="btn">
+            <button>
+                <img src="images/person-outline.svg" alt="">
+                Account
+            </button>
+            <button id="btnLogout">
+                <img src="images/arrow-back-outline.svg" alt="">
+                logout
+            </button>
+          </div>
+
+        </div>
+
+        <div class="main-cont">
+
+           <div id="dashboard" style="display: block;">
+                <h1>Dashboard</h1>
+
+                <div class="cards">
+
+                    <div class="card">
+                        <img src="images/folder-outline.svg" alt="">
+                        <h4>Creating a Project</h4>
+                        <button  id="cardAdd">Add Project</button>
+                    </div>
+
+                    <div class="card">
+                        <img src="images/folder-outline.svg" alt="">
+                        <h4>Assigning Projects to Users</h4>
+                        <button id="cardAssign">Assign Projects</button>
+                    </div>
+
+                    <div class="card">
+                        <img src="images/person-outline.svg" alt="">
+                        <h4>Account Profile</h4>
+                        <button>Account</button>
+                    </div>
+                   
+                </div>
+
+                <footer>
+                    <div class="footer-cards">
+    
+                        <div class="footer-card">
+                            <div class="top">
+                                <span>500</span>
+                                <img src="images/folder-outline.svg" alt="">
+                            </div>
+                            <div>created projects</div>
+                        </div>
+    
+                        <div class="footer-card">
+                            <div class="top">
+                                <span>500</span>
+                                <img src="images/folder-outline.svg" alt="">
+                            </div>
+                            <div>pending projects</div>
+                        </div>
+    
+                        <div class="footer-card">
+                            <div class="top">
+                                <span>500</span>
+                                <img src="images/folder-outline.svg" alt="">
+                            </div>
+                            <div>completed projects</div>
+                        </div>
+                    </div>
+                </footer>
+            </div> 
+
+             <div id="add-projects" style="display: none;">
+               
+                <div class="add-cont">
+                    <h2>Adding a Project</h2>
+                    <input type="text" id="projectName" placeholder="Project Name" required>
+                    <input type="text" id="projectDesc" placeholder="Project Description" required></br>
+                    <input type="date" id="endDate" placeholder="EndDate" required></br>
+
+                    <button id="saveProject">Save</button>
+                </div>
+
+                 <div class="all-projects"></div>
+            </div> 
+
+           <div id="assign-project" style="display: none;">
+
+            <div class="assign-cont">
+                <h2>Assigning Projects</h2> 
+
+                <!-- Users -->
+                <select id="users">
+                    <option value="">Users</option>
+                </select>
+
+                <!-- Projects -->
+                 <select id="projects">
+                    <option value="">Projects</option>
+                 </select>
+
+                 <button id="assignBtn">Assign</button>
+            </div>
+
+            <div class="assigned-projects"></div>
+          </div>
+           
+           </div>
+
+        </div>
+
+    </div>
+   
+    <script type="module" src="../dist/admin.js"></script>
+    <script type="module" src="../dist/assign.js"></script>
+</body>
+</html> 
