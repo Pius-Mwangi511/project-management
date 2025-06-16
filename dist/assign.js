@@ -9,7 +9,7 @@ function loadDropdowns() {
     projectSelect.innerHTML = '<option value="">Projects</option>';
     users.forEach(user => {
         if (!user.assignedProject) {
-            userSelect.innerHTML += `<option value="${user.email}">${user.firstname} ${user.lastname}</option>`;
+            userSelect.innerHTML += `<option value="${user.email}">${user.name}</option>`;
         }
     });
     projects.forEach(project => {

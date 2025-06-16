@@ -2,7 +2,7 @@ interface Project {
   id: string;
   name: string;
   desc: string;
-  endDate: string;
+  endDate: string
   status: "pending" | "completed";
 }
 

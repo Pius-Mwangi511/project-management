@@ -1,9 +1,9 @@
 interface User {
   id: string
-  firstname: string;
-  lastname: string;
+  name: string;
   email: string;
   password: string;
+  role: "Admin" | "users";
   assignedProject?: string;
 }
 
@@ -13,21 +13,20 @@ const adminPassword = "admin123";
 // Registration
 const registerBtn = document.getElementById("register") as HTMLButtonElement;
 registerBtn?.addEventListener("click", () => {
-  const firstname = (document.getElementById("firstname") as HTMLInputElement).value.trim();
-  const lastname = (document.getElementById("lastname") as HTMLInputElement).value.trim();
+  const name = (document.getElementById("name") as HTMLInputElement).value.trim();
   const email = (document.getElementById("email") as HTMLInputElement).value.trim();
   const password = (document.getElementById("password") as HTMLInputElement).value.trim();
 
-  if (!firstname || !lastname || !email || !password) return alert("All fields required");
+  if (!name || !email || !password) return alert("All fields required");
 
   const users: User[] = JSON.parse(localStorage.getItem("users") || "[]");
 
   const newUser: User = {
    id: Date.now().toString(),
-   firstname,
-   lastname,
+   name,
    email,
-   password
+   password,
+   role: "users"
   };
 
   if (users.find(user => user.email === email)) {

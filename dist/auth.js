@@ -5,19 +5,18 @@ const adminPassword = "admin123";
 const registerBtn = document.getElementById("register");
 registerBtn === null || registerBtn === void 0 ? void 0 : registerBtn.addEventListener("click", () => {
     var _a, _b;
-    const firstname = document.getElementById("firstname").value.trim();
-    const lastname = document.getElementById("lastname").value.trim();
+    const name = document.getElementById("name").value.trim();
     const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value.trim();
-    if (!firstname || !lastname || !email || !password)
+    if (!name || !email || !password)
         return alert("All fields required");
     const users = JSON.parse(localStorage.getItem("users") || "[]");
     const newUser = {
         id: Date.now().toString(),
-        firstname,
-        lastname,
+        name,
         email,
-        password
+        password,
+        role: "users"
     };
     if (users.find(user => user.email === email)) {
         return alert("User already exists");
