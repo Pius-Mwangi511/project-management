@@ -8,7 +8,8 @@ registerBtn === null || registerBtn === void 0 ? void 0 : registerBtn.addEventLi
     const name = document.getElementById("name").value.trim();
     const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value.trim();
-    if (!name || !email || !password)
+    const role = document.getElementById("role").value.trim();
+    if (!name || !email || !password || !role)
         return alert("All fields required");
     const users = JSON.parse(localStorage.getItem("users") || "[]");
     const newUser = {
@@ -42,7 +43,7 @@ loginBtn === null || loginBtn === void 0 ? void 0 : loginBtn.addEventListener("c
     const users = JSON.parse(localStorage.getItem("users") || "[]");
     const user = users.find(u => u.email === email && u.password === password);
     if (!user) {
-        alert("Invalid credentials or user not registered.");
+        alert("Invalid credentials or Not registered.");
         return;
     }
     localStorage.setItem("loggedInUser", JSON.stringify(user));

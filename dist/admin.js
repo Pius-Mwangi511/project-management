@@ -1,5 +1,5 @@
 "use strict";
-var _a, _b, _c, _d, _e, _f;
+var _a, _b, _c, _d, _e;
 console.log("admin is loaded");
 function showSection(sectionId) {
     const sections = ["dashboard", "add-projects", "assign-project"];
@@ -13,6 +13,7 @@ function loadProjects() {
     const container = document.querySelector(".all-projects");
     container.innerHTML = "";
     const projects = JSON.parse(localStorage.getItem("projects") || "[]");
+    console.log("Rendering projects", projects);
     projects.forEach(project => {
         const card = document.createElement("div");
         card.className = "projects-card"; //for css cards
@@ -101,31 +102,63 @@ window.deleteProject = (id) => {
     localStorage.setItem("projects", JSON.stringify(projects));
     loadProjects();
 };
-(_f = document.getElementById("saveProject")) === null || _f === void 0 ? void 0 : _f.addEventListener("click", () => {
-    const name = document.getElementById("projectName").value.trim();
-    const desc = document.getElementById("projectDesc").value.trim();
-    const endDate = document.getElementById("endDate").value.trim();
-    let projects = JSON.parse(localStorage.getItem("projects") || "[]");
-    const editId = localStorage.getItem("editId");
-    if (editId) {
-        const index = projects.findIndex(p => p.id === editId);
-        if (index !== -1) {
-            projects[index] = Object.assign(Object.assign({}, projects[index]), { name, desc, endDate });
-            localStorage.removeItem("editId");
+document.addEventListener("DOMContentLoaded", () => {
+    const saveBtn = document.getElementById("saveProject");
+    saveBtn === null || saveBtn === void 0 ? void 0 : saveBtn.addEventListener("click", () => {
+        console.log("saved");
+        const nameInput = document.getElementById("projectName");
+        const descInput = document.getElementById("projectDesc");
+        const endDateInput = document.getElementById("endDate");
+        const name = (nameInput === null || nameInput === void 0 ? void 0 : nameInput.value.trim()) || "";
+        const desc = (descInput === null || descInput === void 0 ? void 0 : descInput.value.trim()) || "";
+        const endDate = (endDateInput === null || endDateInput === void 0 ? void 0 : endDateInput.value.trim()) || "";
+        if (!name || !desc || !endDate) {
+            return alert("Fill all the fields");
         }
-    }
-    else {
-        const newProject = {
-            id: Date.now().toString(),
-            name,
-            desc,
-            endDate,
-            status: "pending"
-        };
-        projects.push(newProject);
-    }
-    localStorage.setItem("projects", JSON.stringify(projects));
-    alert("Project saved successfully.");
-    loadProjects();
-    populateProjectDropdown();
+        let projects = JSON.parse(localStorage.getItem("projects") || "[]");
+        const editId = localStorage.getItem("editId");
+        if (editId) {
+            const index = projects.findIndex((p) => p.id === editId);
+            if (index !== -1) {
+                // Avoid updating to an already existing name (excluding self)
+                const nameExists = projects.some((p, i) => i !== index && p.name.toLowerCase() === name.toLowerCase());
+                if (nameExists) {
+                    return alert("Another project with this name already exists.");
+                }
+                projects[index] = Object.assign(Object.assign({}, projects[index]), { name,
+                    desc,
+                    endDate });
+                localStorage.removeItem("editId");
+            }
+        }
+        else {
+            // Prevent adding duplicates
+            const exists = projects.some(p => p.name.toLowerCase() === name.toLowerCase());
+            if (exists) {
+                return alert("A project with this name already exists.");
+            }
+            const newProject = {
+                id: Date.now().toString(),
+                name,
+                desc,
+                endDate,
+                status: "pending"
+            };
+            projects.push(newProject);
+        }
+        localStorage.setItem("projects", JSON.stringify(projects));
+        alert("Project saved successfully.");
+        // Clear input fields after save
+        if (nameInput) {
+            nameInput.value = "";
+        }
+        if (descInput) {
+            descInput.value = "";
+        }
+        if (endDateInput) {
+            endDateInput.value = "";
+        }
+        loadProjects();
+        populateProjectDropdown();
+    });
 });

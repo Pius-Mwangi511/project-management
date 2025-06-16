@@ -19,6 +19,7 @@ interface Project {
     const container = document.querySelector(".all-projects")!;
     container.innerHTML = "";
     const projects: Project[] = JSON.parse(localStorage.getItem("projects") || "[]");
+    console.log("Rendering projects", projects);
   
     projects.forEach(project => {
       const card = document.createElement("div");
@@ -64,6 +65,7 @@ interface Project {
     });
   }
   
+ 
   // Add event listeners for dashboard buttons
   document.getElementById("btnAdd")?.addEventListener("click", () => {
     console.log("Add button clicked");
@@ -106,6 +108,7 @@ interface Project {
     window.location.href = "login.html";//redirect to login
     }
   });
+
   
   (window as any).editProject = (id: string) => {
     const projects: Project[] = JSON.parse(localStorage.getItem("projects") || "[]");
@@ -126,35 +129,76 @@ interface Project {
     loadProjects();
   };
   
-  document.getElementById("saveProject")?.addEventListener("click", () => {
-    const name = (document.getElementById("projectName") as HTMLInputElement).value.trim();
-    const desc = (document.getElementById("projectDesc") as HTMLInputElement).value.trim();
-    const endDate = (document.getElementById("endDate") as HTMLInputElement).value.trim();
-  
-    let projects: Project[] = JSON.parse(localStorage.getItem("projects") || "[]");
-    const editId = localStorage.getItem("editId");
-  
-    if (editId) {
-      const index = projects.findIndex(p => p.id === editId);
-      if (index !== -1) {
-        projects[index] = { ...projects[index], name, desc, endDate };
-        localStorage.removeItem("editId");
-      }
-    } else {
-      const newProject: Project = {
-        id: Date.now().toString(),
-        name,
-        desc,
-        endDate,
-        status: "pending"
-      };
-      projects.push(newProject);
-    }
-  
-    localStorage.setItem("projects", JSON.stringify(projects));
-    alert("Project saved successfully.");
-    loadProjects();
-    populateProjectDropdown();
-  });
+  document.addEventListener("DOMContentLoaded", () => {
+    const saveBtn = document.getElementById("saveProject");
+    saveBtn?.addEventListener("click", () => {
+        console.log("saved");
 
-  
+        const nameInput = document.getElementById("projectName");
+        const descInput = document.getElementById("projectDesc");
+        const endDateInput = document.getElementById("endDate");
+
+        const name = (nameInput as HTMLInputElement)?.value.trim() || "";
+        const desc = (descInput as HTMLInputElement)?.value.trim() || "";
+        const endDate = (endDateInput as HTMLInputElement)?.value.trim() || "";
+
+        if (!name || !desc || !endDate) {
+            return alert("Fill all the fields");
+        }
+
+        let projects: Project[] = JSON.parse(localStorage.getItem("projects") || "[]");
+        const editId = localStorage.getItem("editId");
+
+        if (editId) {
+            const index = projects.findIndex((p: Project) => p.id === editId);
+            if (index !== -1) {
+                // Avoid updating to an already existing name (excluding self)
+                const nameExists = projects.some((p: Project, i: number) => i !== index && p.name.toLowerCase() === name.toLowerCase());
+                if (nameExists) {
+                    return alert("Another project with this name already exists.");
+                }
+
+                projects[index] = {
+                    ...projects[index],
+                    name,
+                    desc,
+                    endDate
+                };
+                localStorage.removeItem("editId");
+            }
+        } else {
+            // Prevent adding duplicates
+            const exists = projects.some(p => p.name.toLowerCase() === name.toLowerCase());
+            if (exists) {
+                return alert("A project with this name already exists.");
+            }
+
+            const newProject: Project = {
+                id: Date.now().toString(),
+                name,
+                desc,
+                endDate,
+                status: "pending"
+            };
+
+            projects.push(newProject);
+        }
+
+        localStorage.setItem("projects", JSON.stringify(projects));
+        alert("Project saved successfully.");
+
+        // Clear input fields after save
+        if (nameInput) {
+            (nameInput as HTMLInputElement).value = "";
+        }
+        if (descInput) {
+            (descInput as HTMLInputElement).value = "";
+        }
+        if (endDateInput) {
+            (endDateInput as HTMLInputElement).value = "";
+        }
+
+        loadProjects();
+        populateProjectDropdown();
+    });
+});

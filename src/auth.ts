@@ -16,8 +16,9 @@ registerBtn?.addEventListener("click", () => {
   const name = (document.getElementById("name") as HTMLInputElement).value.trim();
   const email = (document.getElementById("email") as HTMLInputElement).value.trim();
   const password = (document.getElementById("password") as HTMLInputElement).value.trim();
+  const role = (document.getElementById("role") as HTMLInputElement).value.trim();
 
-  if (!name || !email || !password) return alert("All fields required");
+  if (!name || !email || !password || !role) return alert("All fields required");
 
   const users: User[] = JSON.parse(localStorage.getItem("users") || "[]");
 
@@ -62,7 +63,7 @@ loginBtn?.addEventListener("click", () => {
   const user = users.find(u => u.email === email && u.password === password);
 
   if (!user) {
-    alert("Invalid credentials or user not registered.");
+    alert("Invalid credentials or Not registered.");
     return;
   }
 
