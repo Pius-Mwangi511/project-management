@@ -26,14 +26,14 @@ if (viewBtn && list && message && viewSectionBtn && dashboardBtn) {
         const project = projects.find(p => p.id === currentUser.assignedProject);
         if (project) {
             list.innerHTML = `
-          <div class="card">
-            <strong>${project.name}</strong><br/>
-            ${project.desc}<br/>
-            Due: ${project.endDate}<br/>
-            Status: ${project.status}<br/>
-            ${project.status === "pending" ? '<button id="completeBtn">Complete</button>' : ""}
-          </div>
-        `;
+        <div class="card">
+          <strong>${project.name}</strong><br/>
+          ${project.desc}<br/>
+          Due: ${project.endDate}<br/>
+          Status: ${project.status}<br/>
+          ${project.status === "pending" ? '<button id="completeBtn">Complete</button>' : ""}
+        </div>
+      `;
             const completeBtn = document.getElementById("completeBtn");
             completeBtn === null || completeBtn === void 0 ? void 0 : completeBtn.addEventListener("click", () => {
                 project.status = "completed";

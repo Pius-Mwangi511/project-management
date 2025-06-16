@@ -36,6 +36,14 @@ body{
     margin: 10px auto;
 }
 
+select #role{
+    width: 85%;
+    padding: 10px;
+    border: 1px solid hsl(0, 0%, 80%);
+    border-radius: 10px;
+    margin: 10px auto;
+}
+
 .card1 button, .login-card button{
     width: 95%;
     padding: 10px;
