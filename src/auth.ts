@@ -1,72 +1,55 @@
 interface User {
-  id: string
+  id: string;
   name: string;
   email: string;
   password: string;
-  role: "Admin" | "users";
+  role: "Admin" | "user";
   assignedProject?: string;
 }
 
-const adminEmail = "admin@pm.com";
-const adminPassword = "admin123";
-
-// Registration
 const registerBtn = document.getElementById("register") as HTMLButtonElement;
-registerBtn?.addEventListener("click", () => {
+registerBtn?.addEventListener("click", async () => {
   const name = (document.getElementById("name") as HTMLInputElement).value.trim();
   const email = (document.getElementById("email") as HTMLInputElement).value.trim();
   const password = (document.getElementById("password") as HTMLInputElement).value.trim();
-  const role = (document.getElementById("role") as HTMLInputElement).value.trim();
+  const role = "user"; // default role
 
-  if (!name || !email || !password || !role) return alert("All fields required");
+  if (!name || !email || !password) return alert("All fields required");
 
-  const users: User[] = JSON.parse(localStorage.getItem("users") || "[]");
+  const res = await fetch(`http://localhost:3000/auth/register, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name, email, password, role }),
+  }`);
 
-  const newUser: User = {
-   id: Date.now().toString(),
-   name,
-   email,
-   password,
-   role: "users"
-  };
-
-  if (users.find(user => user.email === email)) {
-    return alert("User already exists");
-  }
-
-  users.push(newUser);
-  localStorage.setItem("users", JSON.stringify(users));//save to localstorage
-
-  if
-  (window.location.pathname.includes("Admin.html"))
-  {
-      (window as any).populateUserDropdown?.();//refreshes dropdn if on adminpage
-  }
+  const data = await res.json();
+  if (!res.ok) return alert(data.message || "Registration failed");
 
   alert("Registration successful!");
-  window.location.href = "user.html";//redirection after registration
+  window.location.href = "login.html";
 });
 
-// Login
 const loginBtn = document.getElementById("login") as HTMLButtonElement;
-loginBtn?.addEventListener("click", () => {
+loginBtn?.addEventListener("click", async () => {
   const email = (document.getElementById("email") as HTMLInputElement).value.trim();
   const password = (document.getElementById("password") as HTMLInputElement).value.trim();
 
-  if (email === adminEmail && password === adminPassword) {
-    localStorage.setItem("adminLoggedIn", "true");
+  const isAdmin = email === "admin@pm.com" && password === "admin123";
+  if (isAdmin) {
+    localStorage.setItem("role", "Admin");
     window.location.href = "admin.html";
     return;
   }
 
-  const users: User[] = JSON.parse(localStorage.getItem("users") || "[]");
-  const user = users.find(u => u.email === email && u.password === password);
+  const res = await fetch(`http://localhost:3000/auth/login, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, password }),
+  }`);
 
-  if (!user) {
-    alert("Invalid credentials or Not registered.");
-    return;
-  }
+  const data = await res.json();
+  if (!res.ok) return alert(data.message || "Login failed");
 
-  localStorage.setItem("loggedInUser", JSON.stringify(user));
+  localStorage.setItem("loggedInUser", JSON.stringify(data.user));
   window.location.href = "user.html";
 });

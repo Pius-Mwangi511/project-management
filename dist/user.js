@@ -1,80 +1,57 @@
 "use strict";
-// function showSect(sectId: string) {
-//   const sect = ["dashboard", "view-projects"];
-//   sect.forEach(id => {
-//     const element = document.getElementById(id);
-//     // if (element) element.style.display = (id === sectId) ? "block" : "none";              
-//   });
-// }
-// Get logged-in user and user list
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var _a, _b;
 const user = JSON.parse(localStorage.getItem("loggedInUser") || "{}");
-const users = JSON.parse(localStorage.getItem("users") || "[]");
-const currentUser = users.find(u => u.email === user.email);
-// Get DOM elements
-// document.getElementById("btnDashboard")?.addEventListener("click", () => {
-//   showSect("dashboard");
-// });
-// document.getElementById("btnViewPoject")?.addEventListener("click", () => {
-//   showSect("viewSection");
-// });
-// 
-const message = document.getElementById("message");
-const list = document.getElementById("project-list");
-const viewBtn = document.getElementById("btnViewProject");
-const dashboardBtn = document.getElementById("btnDashboard");
-const viewSectionBtn = document.getElementById("viewSection");
-const dashboardSection = document.getElementById("dashboard");
-const btnLog = document.getElementById("btnLogout");
+function getAssignedProject() {
+    return __awaiter(this, void 0, void 0, function* () {
+        const res = yield fetch(`http://localhost:3000/users/${user.id}/project`);
+        const data = yield res.json();
+        return data.project;
+    });
+}
 function initializeView() {
-    // If user has no assigned project
-    if (!(currentUser === null || currentUser === void 0 ? void 0 : currentUser.assignedProject)) {
-        message.textContent = "No project assigned to you yet.";
-        message.style.display = "block";
-        list.innerHTML = "";
-        return;
-    }
-    message.style.display = "none";
-    const projects = JSON.parse(localStorage.getItem("projects") || "[]");
-    const project = projects.find(p => p.id === currentUser.assignedProject);
-    if (project) {
+    return __awaiter(this, void 0, void 0, function* () {
+        var _a;
+        const message = document.getElementById("message");
+        const list = document.getElementById("project-list");
+        const project = yield getAssignedProject();
+        if (!project) {
+            message.textContent = "No project assigned to you yet.";
+            list.innerHTML = "";
+            return;
+        }
+        message.textContent = "";
         list.innerHTML = `
-      <div class="card">
-        <strong>${project.name}</strong><br/>
-        ${project.desc}<br/>
-        Due: ${project.endDate}<br/>
-        Status: ${project.status}<br/>
-        ${project.status === "pending" ? '<button id="completeBtn">Complete</button>' : ""}
-      </div>
-    `;
-        const completeBtn = document.getElementById("completeBtn");
-        completeBtn === null || completeBtn === void 0 ? void 0 : completeBtn.addEventListener("click", () => {
-            project.status = "completed";
-            localStorage.setItem("projects", JSON.stringify(projects));
-            alert("Project marked as complete!");
-            viewBtn.click(); // Refresh view
-        });
-    }
-    else {
-        message.textContent = "Assigned project not found.";
-        message.style.display = "block";
-        list.innerHTML = "";
-    }
-}
-if (viewBtn && dashboardBtn && viewSectionBtn && dashboardSection) {
-    viewBtn.addEventListener("click", () => {
-        dashboardSection.style.display = "none";
-        viewSectionBtn.style.display = "block";
+    <div class="card">
+      <strong>${project.name}</strong><br/>
+      ${project.desc}<br/>
+      Due: ${project.endDate}<br/>
+      Status: ${project.status}<br/>
+      ${project.status === "pending" ? '<button id="completeBtn">Complete</button>' : ""}
+    </div>
+  `;
+        (_a = document.getElementById("completeBtn")) === null || _a === void 0 ? void 0 : _a.addEventListener("click", () => __awaiter(this, void 0, void 0, function* () {
+            const res = yield fetch(`http://localhost:3000/projects/${project.id}/complete, {
+      method: "PATCH",
+    }`);
+            if (res.ok) {
+                alert("Marked as complete");
+                initializeView();
+            }
+        }));
     });
-    dashboardBtn.addEventListener("click", () => {
-        dashboardSection.style.display = "block";
-        viewSectionBtn.style.display = "none";
-    });
-    initializeView();
 }
-btnLog.addEventListener("click", () => {
-    const confirmLogout = confirm("Are you sure you want to logout?");
-    if (confirmLogout) {
-        localStorage.removeItem("loggedInUser"); //clear the user
-        window.location.href = "login.html"; //redirect to login
-    }
+(_a = document.getElementById("btnViewProject")) === null || _a === void 0 ? void 0 : _a.addEventListener("click", initializeView);
+(_b = document.getElementById("btnLogout")) === null || _b === void 0 ? void 0 : _b.addEventListener("click", () => {
+    localStorage.removeItem("loggedInUser");
+    window.location.href = "login.html";
 });
+initializeView();
