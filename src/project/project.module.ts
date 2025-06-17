@@ -2,12 +2,12 @@ import { Module } from '@nestjs/common';
 import { ProjectService } from './project.service';
 import { ProjectController } from './project.controller';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { SharedModule } from 'src/shared/mailer.module';
+import { MailModule } from '../mail/mail.module';
+import { MailService } from 'src/mail/mail.service';
 
 @Module({
-  imports: [SharedModule],
+  imports: [MailModule],
   controllers: [ProjectController],
-  providers: [ProjectService,PrismaService],
-  exports: [ProjectService],
+  providers: [ProjectService,PrismaService,MailService],
 })
 export class ProjectModule {}

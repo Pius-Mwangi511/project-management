@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, ValidationPipe,Param, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, ValidationPipe,Param, UseGuards, Delete, Patch } from '@nestjs/common';
 import { UserService } from './user.service';
 import { User } from 'generated/prisma';
 import { CreateUserDto } from './dto/createUserDto'; 
@@ -22,6 +22,19 @@ getAssignedProject(@Param('id') id: string) {
     @Get('available')
   async findAvailableUsers(): Promise<User[]> {
     return this.userService.findAvailableUsers();
+  }
+  @Patch (':id')
+  async updateUser(
+    @Param('id') id: string,
+    @Body(ValidationPipe) updateUserDto: Partial<CreateUserDto>,
+  ) {
+    return this.userService.updateUser(+id, updateUserDto);
+  }
+
+  
+  @Delete (':id')
+  async deleteUser(@Param('id') id: string) {
+    return this.userService.deleteUser(+id);
   }
 }
 

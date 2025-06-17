@@ -6,20 +6,10 @@ import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
 import { ProjectModule } from './project/project.module';
 import { AuthModule } from './auth/auth.module';
-import { SharedModule } from './shared/mailer.module';
-
+import { MailModule } from './mail/mail.module';
 
 @Module({
-  imports: [
-    ConfigModule.forRoot({
-      isGlobal: true,
-      envFilePath: '.env',
-    }),
-    SharedModule,
-    UserModule,
-    ProjectModule,
-    AuthModule,
-  ],
+  imports: [UserModule, ProjectModule, AuthModule, MailModule],
   controllers: [AppController],
   providers: [AppService],
 })

@@ -29,4 +29,19 @@ export class UserService {
           where: { projectId: null, role: 'user' },
         });
       }
+      async updateUser(id: number, data: Partial<CreateUserDto>): Promise<User> {
+        if (data.password) {
+          data.password = await bcrypt.hash(data.password, 10);
+        }
+        return this.prisma.user.update({
+          where: { id },
+          data,
+        });
+      }
+    
+      async deleteUser(id: number): Promise<User> {
+        return this.prisma.user.delete({
+          where: { id },
+        });
+      }
 }
