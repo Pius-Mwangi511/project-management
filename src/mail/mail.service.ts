@@ -11,7 +11,7 @@ export class MailService {
     await this.mailerService.sendMail({
       to:"jkyalo009@gmail.com",
       subject: 'You have been assigned a new project',
-      html: `<h1>Hello </h1></br><p>You have been assigned a <strong>Project</strong> </br> check it out.</p>`, 
+      html: `<h1>Hello </h1></br><p>You have been assigned a <strong>Project</strong> </br> check it out.</br> in our website</p>`, 
     //   context: {
     //     name: data.name,
     //     project: data.project,
